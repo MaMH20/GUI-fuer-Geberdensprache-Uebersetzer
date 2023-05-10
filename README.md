@@ -97,13 +97,13 @@
 
 #### in welchen Format JSON oder Pickle
 
-- Lösung: Pickle Bibliothek
+- Lösung: Pickle Format
 
   - Vorteile: Einfache Integration in Python, Unterstützung für beliebige Python-Objekte , Behält die Objektstruktur bei.
 
   - Nachteile: eingeschränkte Interoperabilität mit anderen Sprachen
 
-- Lösung: JSON Bibliothek
+- Lösung: JSON Format
 
   - Vorteile: JSON wird von vielen Programmiersprachen unterstützt und kann auf jeder Plattform verwendet werden.
 
@@ -141,13 +141,13 @@
 
 #### Modell speichern
 
-- Lösung: Pickle Bibliothek
+- Lösung: Pickle Format
 
   - Vorteile: Einfache Integration in Python, Unterstützung für beliebige Python-Objekte , Behält die Objektstruktur bei.
 
   - Nachteile: eingeschränkte Interoperabilität mit anderen Sprachen  
 
-- Lösung: JSON Bibliothek
+- Lösung: JSON Format
 
   - Vorteile: JSON wird von vielen Programmiersprachen unterstützt und kann auf jeder Plattform verwendet werden.
 
