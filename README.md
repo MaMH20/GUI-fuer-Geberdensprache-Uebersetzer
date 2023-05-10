@@ -95,7 +95,7 @@
 
   - Lokalen Festplatte
 
-#### in welchen Format?à JSON oder Pickle
+#### in welchen Format JSON oder Pickle
 
 - Lösung: Pickle Bibliothek
 
