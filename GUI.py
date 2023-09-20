@@ -9,18 +9,17 @@ from PIL import Image, ImageTk
 import sklearn
 
 # Laden der trainierten Modelle für linke und rechte Hand
-model_dict_left = pickle.load(open('./model_left_16_09.p', 'rb'))
+model_dict_left = pickle.load(open('./model_left.p', 'rb'))
 model_left = model_dict_left['model']
 
-model_dict_right = pickle.load(open('./model_right_16_09.p', 'rb'))
+model_dict_right = pickle.load(open('./model_right.p', 'rb'))
 model_right = model_dict_right['model']
 
 # Initialisierung globaler Variablen
 predicted_text = ""
 last_stable_time = 0
-counter=0
-previous_predicted_character=""
-
+counter = 0
+previous_predicted_character = ""
 
 # Initialisierung von Mediapipe für die Handerkennung
 mpHands = mp.solutions.hands
@@ -37,7 +36,7 @@ def hand_orientation(landmark_0, landmark_9):
     x0, y0 = landmark_0.x, landmark_0.y
     x9, y9 = landmark_9.x, landmark_9.y
 
-    if abs(x9 - x0) < 0.05:  # since tan(0) --> ∞
+    if abs(x9 - x0) < 0.05:  # da tan(0) --> ∞
         m = 1000000000
     else:
         m = abs((y9 - y0) / (x9 - x0))
@@ -48,7 +47,7 @@ def hand_orientation(landmark_0, landmark_9):
         else:
             return "Left"
     if m > 1:
-        if y9 < y0:  # since, y decreases upwards
+        if y9 < y0:
             return "Up"
         else:
             return "Down"
@@ -89,34 +88,32 @@ def angle_of_rotation(hand_orientation,angle_0_13):
     else:
         print("Default case")
 
-# Funktion zur Berechnung des Winkels zwischen Zeigefinger und Kleiner Finger
+# Funktion zur Berechnung des Winkels zwischen Ringfinger und Kleiner Finger
 def angle():
-    zeigefinger_punkt = hand_landmarks.landmark[0]
-    kleinerfinger_punkt = hand_landmarks.landmark[13]
-    angle = np.arctan((kleinerfinger_punkt.y - zeigefinger_punkt.y) /
-                      (kleinerfinger_punkt.x - zeigefinger_punkt.x)) * 180 / np.pi
+    kleiner_finger_punkt = hand_landmarks.landmark[0]
+    ringfinger_punkt = hand_landmarks.landmark[13]
+    angle = np.arctan((ringfinger_punkt.y - kleiner_finger_punkt.y) /
+                      (ringfinger_punkt.x - kleiner_finger_punkt.x)) * 180 / np.pi
     return angle
 
 
-
-
 def update_textbox():
-        global predicted_text
-        gui.text_view.delete(1.0, tk.END)
+    global predicted_text
+    gui.text_view.delete(1.0, tk.END)
 
-        if len(predicted_text) >= 3:
-            last_five_characters = predicted_text[-3:]
+    if len(predicted_text) >= 2:
+        last_two_characters = predicted_text[-2:]
 
-            # Überprüfen, ob die letzten 5 Zeichen 'AAAAA' sind
-            if last_five_characters == 'AAA':
-                predicted_text = predicted_text[:-3] + ' '
+        # Überprüfen, ob die letzten 2 Zeichen '  ' sind
+        if last_two_characters == "  ":
+            predicted_text = predicted_text[:-2] + " "
 
-            gui.text_view.insert(tk.END, predicted_text)
-        else:
+        gui.text_view.insert(tk.END, predicted_text)
+    else:
 
-            gui.text_view.insert(tk.END, predicted_text)
+        gui.text_view.insert(tk.END, predicted_text)
 
-
+####standard Auflösung 1920*1080
 # Klasse für die Benutzeroberfläche (GUI)
 class GUI:
 
@@ -184,22 +181,19 @@ class GUI:
         self.button_frame = tk.Frame(self.my_frame, background="#1D5B79")
         self.button_frame.grid(row=1, column=1, padx=200, pady=20, sticky=tk.SE)
 
-        self.label_frame = tk.Frame(self.my_frame)
-        self.label_frame.grid(row=2, column=0, padx=10, sticky=tk.SW)
-
         # Hintergrundbild laden
         self.bg_image_left = ImageTk.PhotoImage(Image.open("alphabet.png"))
 
         # Display the background images on the canvases
-        self.my_image_output = tk.Canvas(self.image_frame, width=750, height=490)
+        self.my_image_output = tk.Canvas(self.image_frame, width=900, height=600)#####
         self.my_image_output.grid(row=0, column=0)
         self.my_image_output.create_image(0, 0, image=self.bg_image_left, anchor=tk.NW)
 
         self.cap = cv2.VideoCapture(0)
-        self.my_video_stream = tk.Canvas(self.video_frame, width=750, height=490)
+        self.my_video_stream = tk.Canvas(self.video_frame, width=900, height=600)##
         self.my_video_stream.grid(row=0, column=1)
 
-        self.text_view = tk.Text(self.text_frame, font=("Helvetica", 40), width=26, height=4, bg="#27374D", fg="#ffffff")
+        self.text_view = tk.Text(self.text_frame, font=("Helvetica", 49), width=25, height=4, bg="#27374D", fg="#ffffff")###
         self.text_view.grid(row=1, column=0, sticky=tk.SW)
 
         self.button_frame = tk.Frame(self.my_frame, background="#1D5B79")
@@ -221,12 +215,6 @@ class GUI:
                                     width=30, height=1, command=self.stop_stream_and_quit)
         self.quit_button.pack(pady=10)
 
-        self.space_label = tk.Label(self.label_frame, text="Klicken Sie auf die Leertaste, um die Wörter zu trennen",
-                                    font=("Helvetica", 10), bg="#27374D", fg="#ffffff")
-        self.space_label.pack(side=tk.LEFT, anchor=tk.SW)
-
-        self.root.bind("<space>", self.add_space)
-
         self.mp_hands = mp.solutions.hands
         self.mp_drawing = mp.solutions.drawing_utils
         self.mp_drawing_styles = mp.solutions.drawing_styles
@@ -238,16 +226,11 @@ class GUI:
         self.toggle_stream()
 
 
-
-    def add_space(self, event):
-        global predicted_text
-        predicted_text += " "
-        update_textbox()
     def stop_stream_and_quit(self):
         self.toggle_stream()
         # die verzögerung ist die Lösung, dass das Thread ausgemacht wird un keine
         # probleme auftauchen
-        self.root.after(400,self.root.destroy)
+        self.root.after(400, self.root.destroy)
 
 
     def toggle_stream(self):
@@ -260,7 +243,7 @@ class GUI:
 
     def delete_text(self):
         global predicted_text
-        predicted_text=""
+        predicted_text = " "
         self.text_view.delete(1.0, tk.END)
 
     def delete_last_character(self):
@@ -273,7 +256,6 @@ class GUI:
             global predicted_text,previous_predicted_character,counter
 
             global hand_landmarks,left_hand,right_hand
-
 
             data_aux = []
             x_ = []
@@ -343,33 +325,32 @@ class GUI:
                         predicted_character = prediction[0]
 
                     if predicted_character == "Blank":
-                        predicted_character = ""
+                        predicted_character = " "
 
 
                     cv2.putText(frame, predicted_character, (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 255), 3,
                                 cv2.LINE_AA)
 
-                    if predicted_character==previous_predicted_character:
-                        counter +=1
-                        if counter>=7:
+                    if predicted_character == previous_predicted_character:
+                        counter += 1
+                        if counter >= 7:
                             # Aktualisiere die globale Variable mit dem vorhergesagten Buchstaben
                             predicted_text += predicted_character
                             # Rufe die Methode auf, um das Textfeld zu aktualisieren
                             update_textbox()
-                            counter=0
+                            counter = 0
                     else:
-                        previous_predicted_character=predicted_character
-                        counter=0
-
+                        previous_predicted_character = predicted_character
+                        counter = 0
 
             img = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
             # Passe die Größe des Rahmens an die 800x600-Leinwand an und behalten Sie dabei das Seitenverhältnis bei
-            img = img.resize((750, 490), Image.LANCZOS)
+            img = img.resize((900, 600), Image.LANCZOS)
 
             # Berechne Sie den Zentrierungsversatz, um den Videorahmen innerhalb der Leinwand zu zentrieren
-            offset_x = max((750 - img.width) // 2, 0)
-            offset_y = max((490 - img.height) // 2, 0)
+            offset_x = max((900 - img.width) // 2, 0)
+            offset_y = max((600 - img.height) // 2, 0)
 
             imgtk = ImageTk.PhotoImage(image=img)
             self.my_video_stream.create_image(offset_x, offset_y, image=imgtk, anchor=tk.NW)
