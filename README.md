@@ -1,6 +1,6 @@
 # Gebärdensprache Übersetzer „Applikation“ (Buchstabenerkennung)
 
-#### Das Ziel unseres Projekts ist es, eine Anwendung zu entwickeln, die die Gebärdensprache Alphapet erkennen kann. Um unser Ziel zu erreichen, mussten wir verschiedene Technologien verwenden und viele Prozesse durchführen.
+#### Das Ziel unseres Projekts ist, eine Anwendung zu entwickeln, die die Gebärdensprache Alphapet erkennen kann. Um unser Ziel zu erreichen, mussten wir verschiedene Technologien verwenden und viele Prozesse durchführen.
 #### Zuerst mussten wir Daten (Bilder) sammeln und in Zielordnern speichern, wofür wir das Skript Collect_imgs.py verwendet haben. [Collect_imgs.py](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/Collect_imgs.py)
 #### Danach mussten wir die Daten aufbereiten und bearbeiten, damit wir das Dataset erstellen konnten, das wir später zum Trainieren des Modells verwenden werden, dafür haben wir das Skript create_dataset.py verwendet. [create_dataset.py](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/create_dataset.py)
 
