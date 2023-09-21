@@ -8,5 +8,5 @@
 
 #### Als nächstes haben wir das Modell mit geeigneten Trainingsalgorithmen trainiert und die Genauigkeit berechnet, dafür haben wir die Scikit-Learn-Bibliothek verwendet, die im Skript train_classsifier.py zu finden ist. [train_classifier.py](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/train_classifier.py)
 
-#### Am Ende haben wir ein GUI erstellt, um unsere Ergebnisse benutzerfreundlich darzustellen und das Modell zu testen. 
+#### Am Ende haben wir ein GUI erstellt, um unsere Ergebnisse benutzerfreundlich darzustellen und das Modell zu testen. [GUI](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/GUI.py)
 #### Detaillierte Erklärungen sind im folgenden Bericht zu finden. [Projektbericht](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/Projektbericht.pdf)
