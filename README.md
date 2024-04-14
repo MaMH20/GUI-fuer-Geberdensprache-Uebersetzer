@@ -10,4 +10,4 @@
 
 #### Am Ende haben wir ein GUI erstellt, um unsere Ergebnisse benutzerfreundlich darzustellen und das Modell zu testen. [GUI](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/GUI.py)
 #### Detaillierte Erklärungen sind im folgenden Bericht zu finden. [Projektbericht](https://github.com/MaMH20/GUI-fuer-Geberdensprache-Uebersetzer/blob/main/Bericht_Final.pdf)
-lol
+
